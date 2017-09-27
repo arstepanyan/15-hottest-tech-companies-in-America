@@ -8,7 +8,7 @@ output:
 ---
 
 Here is an inteructive map of 15 hottest tech companies in America, according to LinkedIn.  
-All of the information on the map comes from the the following source: https://www.cnbc.com/2017/05/18/the-15-hottest-tech-companies-in-america-according-to-linkedin.html
+All of the information on the map comes from the following source: https://www.cnbc.com/2017/05/18/the-15-hottest-tech-companies-in-america-according-to-linkedin.html
 
 ```{r data_frame, echo = FALSE}
 library(leaflet)
