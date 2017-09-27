@@ -178,11 +178,6 @@ companySites <- c(
 ```{r map, echo = FALSE, message = FALSE}
 library(leaflet)
 
-pal <- colorNumeric(
-  palette = "YlGnBu",
-  domain = addition.df$rank
-)
-
 hottest_companies %>%
         leaflet() %>%
         addTiles() %>%
