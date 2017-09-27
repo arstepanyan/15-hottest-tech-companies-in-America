@@ -1,0 +1,194 @@
+---
+title: "The 15 hottest tech companies in America, according to LinkedIn"
+author: "Araks Stepanyan"
+date: "9/27/2017"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+Here is an inteructive map of 15 hottest tech companies in America, according to LinkedIn.  
+All of the information on the map comes from the the following source: https://www.cnbc.com/2017/05/18/the-15-hottest-tech-companies-in-america-according-to-linkedin.html
+
+```{r data_frame, echo = FALSE}
+library(leaflet)
+hottest_companies <- data.frame(name = c("Cisco", "Oracle", "Adobe",
+                                         "Twitter", "Workday", 
+                                         "Dell Technologies", 
+                                         "Netflix", "Airbnb", 
+                                         "Apple", "Tesla", "Uber",
+                                         "Salesforce", "Facebook",
+                                         "Amazon", "Alphabet"),
+                        lat = c(37.407186, 37.529702, 37.330736,
+                                37.776769, 37.694391, 30.488505,
+                                37.259617, 37.772123, 37.332000,
+                                37.410825, 37.775228, 37.790503,
+                                37.483666, 47.414332, 37.422198),
+                        lng = c(-121.945089, -122.265832, -121.894228,
+                                -122.416616, -121.921336, -97.670466,
+                                -121.962643, -122.405293, -122.030781,
+                                -122.124515, -122.417563, -122.397215,
+                                -122.147666, -122.257350, -122.083540)
+                        )
+
+addition.df <- data.frame(employees = c(73000, 135000, 16500, 3500, 
+                                      6600, 145000, 3200, 2000, 
+                                      110000, 30000, 12000, 25000,
+                                      17000, 341400, 72000),
+                        rank = c(15, 14, 13, 12, 11, 10, 9, 
+                                 8, 7, 6, 5, 4, 3, 2, 1),
+                        prev_rank = c("New to the list", 
+                                      "New to the list", 12, 9, 13,
+                                      "New to the list", 11, 10, 4,
+                                      8, 6, 2, 3, 5, 1)
+                        )
+
+companyIcon <- makeIcon(
+        iconUrl = c("https://upload.wikimedia.org/wikipedia/commons/6/64/Cisco_logo.svg", 
+        "https://upload.wikimedia.org/wikipedia/commons/5/50/Oracle_logo.svg",
+        "https://upload.wikimedia.org/wikipedia/commons/7/7b/Adobe_Systems_logo_and_wordmark.svg",
+        "https://upload.wikimedia.org/wikipedia/en/9/9f/Twitter_bird_logo_2012.svg",
+        "https://upload.wikimedia.org/wikipedia/commons/8/80/Workday_logo.svg",
+        "https://pbs.twimg.com/profile_images/883402239011807237/K7VmMl3W_400x400.jpg",
+        "https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg",
+        "https://upload.wikimedia.org/wikipedia/commons/6/69/Airbnb_Logo_Bélo.svg",
+        "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg",
+        "https://upload.wikimedia.org/wikipedia/commons/b/bd/Tesla_Motors.svg",
+        "https://upload.wikimedia.org/wikipedia/commons/6/62/Uber_logo.svg",
+        "https://upload.wikimedia.org/wikipedia/en/3/34/SFDC_logo.png",
+        "https://upload.wikimedia.org/wikipedia/commons/7/7c/Facebook_New_Logo_%282015%29.svg",
+        "https://upload.wikimedia.org/wikipedia/commons/7/70/Amazon_logo_plain.svg",
+        "https://upload.wikimedia.org/wikipedia/commons/7/7a/Alphabet_Inc_Logo_2015.svg"
+        ),
+        iconWidth = 70*215/230, iconHeight = 70,
+        iconAnchorX = 50*215/230/2, iconAnchorY = 16
+)
+
+  
+companySites <- c(
+  paste(
+          "<b><a href='https://www.cisco.com'>15. Cisco</a></b>",
+          "<br/>",
+          addition.df$employees[1], "employees","<br/>",
+          "Current Ranking:", addition.df$rank[1], "<br/>",
+          "Previous Ranking:", addition.df$prev_rank[1]
+          ),
+  paste(
+          "<b><a href='https://www.oracle.com'>14. Oracle</a></b>",
+          "<br/>",
+          addition.df$employees[2], "employees","<br/>",
+          "Current Ranking:", addition.df$rank[2], "<br/>",
+          "Previous Ranking:", addition.df$prev_rank[2]
+          ),
+  paste(
+          "<b><a href='https://www.adobe.com'>13. Adobe</a></b>",
+          "<br/>",
+          addition.df$employees[3], "employees","<br/>",
+          "Current Ranking:", addition.df$rank[3], "<br/>",
+          "Previous Ranking:", addition.df$prev_rank[3]
+          ),
+  paste(
+          "<b><a href='https://www.twitter.com'>12. Twitter</a></b>",
+          "<br/>",
+          addition.df$employees[4], "employees","<br/>",
+          "Current Ranking:", addition.df$rank[4], "<br/>",
+          "Previous Ranking:", addition.df$prev_rank[4]
+          ),
+  paste(
+          "<b><a href='https://www.workday.com'>11. Workday</a></b>",
+          "<br/>",
+          addition.df$employees[5], "employees","<br/>",
+          "Current Ranking:", addition.df$rank[5], "<br/>",
+          "Previous Ranking:", addition.df$prev_rank[5]
+          ),
+  paste(
+         "<b><a href='https://www.delltechnologies.com/en-us/index.htm'>10. Dell Technologies</a></b>",
+         "<br/>",
+          addition.df$employees[6], "employees","<br/>",
+          "Current Ranking:", addition.df$rank[6], "<br/>",
+          "Previous Ranking:", addition.df$prev_rank[6]
+         ),
+  paste(
+          "<b><a href='https://www.netflix.com'>9. Netflix</a></b>",
+          "<br/>",
+          addition.df$employees[7], "employees","<br/>",
+          "Current Ranking:", addition.df$rank[7], "<br/>",
+          "Previous Ranking:", addition.df$prev_rank[7]
+          ),
+  paste(
+          "<b><a href='https://www.airbnb.com'>8. Airbnb</a></b>",
+          "<br/>",
+          addition.df$employees[8], "employees","<br/>",
+          "Current Ranking:", addition.df$rank[8], "<br/>",
+          "Previous Ranking:", addition.df$prev_rank[8]
+          ),
+  paste(
+          "<b><a href='https://www.apple.com'>7. Apple</a></b>",
+          "<br/>",
+          addition.df$employees[9], "employees","<br/>",
+          "Current Ranking:", addition.df$rank[9], "<br/>",
+          "Previous Ranking:", addition.df$prev_rank[9]
+          ),
+  paste(
+          "<b><a href='https://www.tesla.com'>6. Tesla</a></b>",
+          "<br/>",
+          addition.df$employees[10], "employees","<br/>",
+          "Current Ranking:", addition.df$rank[10], "<br/>",
+          "Previous Ranking:", addition.df$prev_rank[10]
+          ),
+  paste(
+         "<b><a href='https://www.uber.com'>5. Uber</a></b>",
+         "<br/>",
+          addition.df$employees[11], "employees","<br/>",
+          "Current Ranking:", addition.df$rank[11], "<br/>",
+          "Previous Ranking:", addition.df$prev_rank[11]
+         ),
+  paste(
+          "<b><a href='https://www.salesforce.com'>4. Salseforce</a></b>",
+          "<br/>",
+          addition.df$employees[12], "employees","<br/>",
+          "Current Ranking:", addition.df$rank[12], "<br/>",
+          "Previous Ranking:", addition.df$prev_rank[12]
+          ),
+  paste(
+          "<b><a href='https://www.facebook.com'>3. Facebook</a></b>",
+          "<br/>",
+          addition.df$employees[13], "employees","<br/>",
+          "Current Ranking:", addition.df$rank[13], "<br/>",
+          "Previous Ranking:", addition.df$prev_rank[13]
+          ),
+  paste(
+          "<b><a href='https://www.amazon.com'>2. Amazon</a></b>",
+          "<br/>",
+          addition.df$employees[14], "employees","<br/>",
+          "Current Ranking:", addition.df$rank[14], "<br/>",
+          "Previous Ranking:", addition.df$prev_rank[14]
+          ),
+  paste(
+          "<b><a href='https://www.abc.xyz'>1. Alphabet</a></b>",
+          "<br/>",
+          addition.df$employees[15], "employees","<br/>",
+          "Current Ranking:", addition.df$rank[15], "<br/>",
+          "Previous Ranking:", addition.df$prev_rank[15]
+          )
+)
+```
+
+
+```{r map, echo = FALSE, message = FALSE}
+library(leaflet)
+
+pal <- colorNumeric(
+  palette = "YlGnBu",
+  domain = addition.df$rank
+)
+
+hottest_companies %>%
+        leaflet() %>%
+        addTiles() %>%
+        addMarkers(icon = companyIcon, popup = companySites,
+                   clusterOptions = markerClusterOptions())
+
+
+
+```
